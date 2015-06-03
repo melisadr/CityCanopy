@@ -2,6 +2,8 @@
 #include "glwidget.h"
 #include "topodatamanager.h"
 #include "topofigure.h"
+#include "urbandatamanager.h"
+#include "urbanfigure.h"
 #include <QToolBar>
 #include <QMenuBar>
 #include <QMenu>
@@ -19,13 +21,20 @@ MainWindow::MainWindow() : centralWidget(0)
 void MainWindow::initMenuBar()
 {
     QMenuBar *menuBar = new QMenuBar;
-
-    QMenu *menuArchive = menuBar->addMenu(tr("&Archive"));
-    QAction *openFile = new QAction(menuArchive);
-    openFile->setText(tr("Open file"));
-    menuArchive-> addAction(openFile);
-    connect(openFile,SIGNAL(triggered()),this,SLOT(openFile()));
     setMenuBar(menuBar);
+
+    QMenu *menuArchive = menuBar->addMenu(tr("Archive"));
+
+    QAction *openTopo = new QAction(menuArchive);
+    openTopo->setText(tr("Open topo"));
+    menuArchive-> addAction(openTopo);
+    connect(openTopo,SIGNAL(triggered()),this,SLOT(openTopo()));
+
+    QAction *openUrban = new QAction(menuArchive);
+    openUrban->setText(tr("Open urban"));
+    menuArchive-> addAction(openUrban);
+    connect(openUrban,SIGNAL(triggered()),this,SLOT(openUrban()));
+
 }
 
 void MainWindow::initCentralWidget()
@@ -49,13 +58,25 @@ void MainWindow::initToolBar()
 
 }
 
-void MainWindow::openFile()
+void MainWindow::openTopo()
 {
     QString fileName = QFileDialog::getOpenFileName();
     qDebug() << "Opening :" << fileName;
-    TopoDataManager topoData;
-    topoData.load(fileName);
-    TopoFigure topoFigure;
-    topoFigure.load(topoData);
-    centralWidget->initFigure(topoFigure);
+    TopoFigure figure;
+    TopoDataManager dataManager;
+    dataManager.load(fileName);
+    figure.load(dataManager);
+    centralWidget->initFigure(figure);
+}
+
+void MainWindow::openUrban()
+{
+    QString fileName = QFileDialog::getOpenFileName();
+    qDebug() << "Opening :" << fileName;
+    UrbanFigure figure;
+    UrbanDataManager dataManager;
+    dataManager.load(fileName);
+    figure.load(dataManager);
+    centralWidget->initFigure(figure);
+
 }

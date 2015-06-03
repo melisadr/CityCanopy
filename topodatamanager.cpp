@@ -62,7 +62,7 @@ void TopoDataManager::load(const QString fileName)
         line = fileStream.readLine();
         auxLine = line.split(" ",QString::SkipEmptyParts);
         for(j = 0; j < ncols; ++j){
-            *p_aux++ = auxLine[j].toFloat();
+            *p_aux++ = auxLine[j].toFloat() / 1000.0;
         }
         ++i;
     }
