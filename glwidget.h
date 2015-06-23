@@ -30,7 +30,7 @@ protected:
     void resizeGL(int width, int height) Q_DECL_OVERRIDE;
     void mousePressEvent(QMouseEvent *event) Q_DECL_OVERRIDE;
     void mouseMoveEvent(QMouseEvent *event) Q_DECL_OVERRIDE;
-    void keyPressEvent(QKeyEvent *event) Q_DECL_OVERRIDE;
+    //void keyPressEvent(QKeyEvent *event) Q_DECL_OVERRIDE;
 
 private:
 
@@ -38,8 +38,6 @@ private:
     int m_xRot;
     int m_yRot;
     int m_zRot;
-    int m_nfigures;
-    float m_cameraPosZ;
     QPoint m_lastPos;
     QVector<Figure> m_figures_list;
     QVector<QOpenGLBuffer> m_figuresVbo_list;

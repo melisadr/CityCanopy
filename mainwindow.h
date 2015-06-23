@@ -20,8 +20,7 @@ private:
     GLWidget *centralWidget;
 
 private slots:
-    void openTopo();
-    void openUrban();
+    void openFile();
 
 };
 

@@ -17,17 +17,13 @@ SOURCES += main.cpp\
     glwidget.cpp \
     topodatamanager.cpp \
     figure.cpp \
-    topofigure.cpp \
-    urbandatamanager.cpp \
-    urbanfigure.cpp
+    topofigure.cpp
 
 HEADERS  += mainwindow.h \
     glwidget.h \
     datamanager.h \
     topodatamanager.h \
     figure.h \
-    topofigure.h \
-    urbandatamanager.h \
-    urbanfigure.h
+    topofigure.h
 
 FORMS    +=

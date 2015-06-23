@@ -13,6 +13,8 @@ public:
 private:
     float xllcorner;
     float yllcorner;
+    float cellsize;
+
 };
 
 #endif // TOPODATAMANAGER_H
