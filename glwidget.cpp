@@ -74,13 +74,16 @@ void GLWidget::setZRotation(int angle)
 static const char *vertexShaderSource =
     "attribute vec4 vertex;\n"
     "attribute vec3 normal;\n"
+    "attribute vec3 color;\n"
     "varying vec3 vert;\n"
     "varying vec3 vertNormal;\n"
+    "varying vec3 color_out;\n"
     "uniform mat4 projMatrix;\n"
     "uniform mat4 mvMatrix;\n"
     "uniform mat3 normalMatrix;\n"
     "uniform highp vec3 lightPos;\n"
     "void main() {\n"
+    "   color_out = color;\n"
     "   vert = vec3(mvMatrix * vertex);\n"
     "   vertNormal = normalize(normalMatrix * normal);\n"
     "   gl_Position = projMatrix * mvMatrix * vertex;\n"
@@ -89,12 +92,12 @@ static const char *vertexShaderSource =
 static const char *fragmentShaderSource =
     "varying highp vec3 vert;\n"
     "varying highp vec3 vertNormal;\n"
+    "varying highp vec3 color_out;\n"
     "uniform highp vec3 lightPos;\n"
     "void main() {\n"
     "   highp vec3 L = normalize(lightPos - vert);\n"
     "   highp float NL = max(dot(normalize(vertNormal), L), 0.0);\n"
-    "   highp vec3 color = vec3(0.39, 1.0, 0.0);\n"
-    "   highp vec3 col = clamp(color * 0.2 + color * 0.8 * NL, 0.0, 1.0);\n"
+    "   highp vec3 col = clamp(color_out * 0.2 + color_out * 0.8 * NL, 0.0, 1.0);\n"
     "   gl_FragColor = vec4(col, 1.0);\n"
     "}\n";
 
@@ -124,6 +127,7 @@ void GLWidget::initializeGL()
     m_program->addShaderFromSourceCode(QOpenGLShader::Fragment, fragmentShaderSource);
     m_program->bindAttributeLocation("vertex", 0);
     m_program->bindAttributeLocation("normal", 1);
+    m_program->bindAttributeLocation("color", 2);
     m_program->link();
 
     m_program->bind();
@@ -167,8 +171,10 @@ void GLWidget::paintGL()
         QOpenGLFunctions *f = QOpenGLContext::currentContext()->functions();
         f->glEnableVertexAttribArray(0);
         f->glEnableVertexAttribArray(1);
-        f->glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(GLfloat), 0);
-        f->glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(GLfloat), reinterpret_cast<void *>(3 * sizeof(GLfloat)));
+        f->glEnableVertexAttribArray(2);
+        f->glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 9 * sizeof(GLfloat), 0);
+        f->glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 9 * sizeof(GLfloat), reinterpret_cast<void *>(3 * sizeof(GLfloat)));
+        f->glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, 9 * sizeof(GLfloat), reinterpret_cast<void *>(6 * sizeof(GLfloat)));
         glDrawArrays(GL_TRIANGLES, 0, m_figures_list[k].vertexCount());
         m_figuresVbo_list[k].release();
     }

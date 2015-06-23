@@ -17,6 +17,7 @@ void TopoFigure::load(DataManager &dataManager)
     int ncols = dataManager.getColsSize();
     int nrows = dataManager.getRowsSize();
     float mScale;
+    QVector3D color(0.5,0.5,0.5);
 
     if(ncols >= nrows){
         mScale = 1.0f/(ncols-1);
@@ -45,13 +46,13 @@ void TopoFigure::load(DataManager &dataManager)
             QVector3D v3(x2,y2,z22);
             QVector3D v4(x2,y1,z21);
 
-            add(v1,m_normals[i*ncols+j]);
-            add(v2,m_normals[(i+1)*ncols+j]);
-            add(v3,m_normals[(i+1)*ncols+j+1]);
+            add(v1,m_normals[i*ncols+j],color);
+            add(v2,m_normals[(i+1)*ncols+j],color);
+            add(v3,m_normals[(i+1)*ncols+j+1],color);
 
-            add(v1,m_normals[i*ncols+j]);
-            add(v3,m_normals[(i+1)*ncols+j+1]);
-            add(v4,m_normals[i*ncols+j+1]);
+            add(v1,m_normals[i*ncols+j],color);
+            add(v3,m_normals[(i+1)*ncols+j+1],color);
+            add(v4,m_normals[i*ncols+j+1],color);
         }
     }
 }

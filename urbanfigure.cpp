@@ -63,12 +63,13 @@ void UrbanFigure::load(DataManager &dataManager)
 
 void UrbanFigure::addQuad(QVector3D v1, QVector3D v2, QVector3D v3,QVector3D v4)
 {
+    QVector3D color(1.0,0.0,0.0);
     QVector3D n = QVector3D::normal(v2-v1,v3-v1);
-    add(v1,n);
-    add(v2,n);
-    add(v3,n);
+    add(v1,n,color);
+    add(v2,n,color);
+    add(v3,n,color);
     n = QVector3D::normal(v3-v1,v4-v1);
-    add(v1,n);
-    add(v3,n);
-    add(v4,n);
+    add(v1,n,color);
+    add(v3,n,color);
+    add(v4,n,color);
 }

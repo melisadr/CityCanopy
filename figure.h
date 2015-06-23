@@ -11,11 +11,11 @@ public:
     ~Figure();
     const GLfloat *constData() const { return m_data.constData(); }
     int count() const { return m_count; }
-    int vertexCount() const { return m_count / 6; }
+    int vertexCount() const { return m_count / 9; }
     void load(DataManager &dataManager);
 
 protected:
-    void add(const QVector3D &v, const QVector3D &n);
+    void add(const QVector3D &v, const QVector3D &n, const QVector3D &c);
     QVector<GLfloat> m_data;
     QVector<QVector3D> m_normals;
     int m_count;
