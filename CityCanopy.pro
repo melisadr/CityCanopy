@@ -21,7 +21,8 @@ SOURCES += main.cpp\
     urbandatamanager.cpp \
     urbanfigure.cpp \
     write_geogrid.c \
-    exporter.cpp
+    exporter.cpp \
+    exporterwrf.cpp
 
 HEADERS  += mainwindow.h \
     glwidget.h \
@@ -31,7 +32,8 @@ HEADERS  += mainwindow.h \
     topofigure.h \
     urbandatamanager.h \
     urbanfigure.h \
-    exporter.h
+    exporter.h \
+    exporterwrf.h
 
 FORMS    += \
     mainwindow.ui

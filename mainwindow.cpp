@@ -1,10 +1,7 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 #include "glwidget.h"
-#include "topodatamanager.h"
-#include "topofigure.h"
-#include "urbandatamanager.h"
-#include "urbanfigure.h"
+#include "exporterwrf.h"
 #include <QToolBar>
 #include <QMenuBar>
 #include <QMenu>
@@ -31,9 +28,8 @@ void MainWindow::on_openTopoButton_clicked()
     if (fileName != ""){
         qDebug() << "Opening :" << fileName;
         TopoFigure figure;
-        TopoDataManager dataManager;
-        dataManager.load(fileName);
-        figure.load(dataManager);
+        topoDataManager.load(fileName);
+        figure.load(topoDataManager);
         ui->openGLWidget->initFigure(figure);
     }
 }
@@ -44,9 +40,14 @@ void MainWindow::on_openUrbanButton_clicked()
     if(fileName != ""){
         qDebug() << "Opening :" << fileName;
         UrbanFigure figure;
-        UrbanDataManager dataManager;
-        dataManager.load(fileName);
-        figure.load(dataManager);
+        urbanDataManager.load(fileName);
+        figure.load(urbanDataManager);
         ui->openGLWidget->initFigure(figure);
     }
+}
+
+void MainWindow::on_exportButton_clicked()
+{
+    ExporterWRF exporterWRF;
+    exporterWRF.exportData(urbanDataManager);
 }

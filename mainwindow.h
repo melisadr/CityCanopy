@@ -1,6 +1,9 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
-
+#include "topodatamanager.h"
+#include "topofigure.h"
+#include "urbandatamanager.h"
+#include "urbanfigure.h"
 
 #include <QMainWindow>
 
@@ -18,12 +21,13 @@ public:
 
 private:
     Ui::MainWindow *ui;
-
-    //GLWidget *centralWidget;
+    TopoDataManager topoDataManager;
+    UrbanDataManager urbanDataManager;
 
 private slots:
     void on_openTopoButton_clicked();
     void on_openUrbanButton_clicked();
+    void on_exportButton_clicked();
 };
 
 #endif // MAINWINDOW_H
