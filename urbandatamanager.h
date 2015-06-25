@@ -9,9 +9,6 @@ public:
     ~UrbanDataManager();
     void load(const QString filename);
 
-private:
-    float xllcorner;
-    float yllcorner;
 };
 
 #endif // URBANDATAMANAGER_H

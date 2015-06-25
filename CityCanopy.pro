@@ -37,3 +37,10 @@ HEADERS  += mainwindow.h \
 
 FORMS    += \
     mainwindow.ui
+
+DISTFILES += \
+    vertex.vsh \
+    fragment.fsh
+
+RESOURCES += \
+    resources.qrc

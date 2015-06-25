@@ -23,6 +23,8 @@ private:
     Ui::MainWindow *ui;
     TopoDataManager topoDataManager;
     UrbanDataManager urbanDataManager;
+    int urban_set;
+    int topo_set;
 
 private slots:
     void on_openTopoButton_clicked();

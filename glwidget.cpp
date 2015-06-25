@@ -9,8 +9,8 @@ GLWidget::GLWidget(QWidget *parent)
       m_xRot(0),
       m_yRot(0),
       m_zRot(0),
-      m_program(0),
-      m_nfigures(0)
+      m_nfigures(0),
+      m_program(0)
 {
     m_core = QCoreApplication::arguments().contains(QStringLiteral("--coreprofile"));
     // --transparent causes the clear color to be transparent. Therefore, on systems that
@@ -71,36 +71,6 @@ void GLWidget::setZRotation(int angle)
     }
 }
 
-static const char *vertexShaderSource =
-    "attribute vec4 vertex;\n"
-    "attribute vec3 normal;\n"
-    "attribute vec3 color;\n"
-    "varying vec3 vert;\n"
-    "varying vec3 vertNormal;\n"
-    "varying vec3 color_out;\n"
-    "uniform mat4 projMatrix;\n"
-    "uniform mat4 mvMatrix;\n"
-    "uniform mat3 normalMatrix;\n"
-    "uniform highp vec3 lightPos;\n"
-    "void main() {\n"
-    "   color_out = color;\n"
-    "   vert = vec3(mvMatrix * vertex);\n"
-    "   vertNormal = normalize(normalMatrix * normal);\n"
-    "   gl_Position = projMatrix * mvMatrix * vertex;\n"
-    "}\n";
-
-static const char *fragmentShaderSource =
-    "varying highp vec3 vert;\n"
-    "varying highp vec3 vertNormal;\n"
-    "varying highp vec3 color_out;\n"
-    "uniform highp vec3 lightPos;\n"
-    "void main() {\n"
-    "   highp vec3 L = normalize(lightPos - vert);\n"
-    "   highp float NL = max(dot(normalize(vertNormal), L), 0.0);\n"
-    "   highp vec3 col = clamp(color_out * 0.2 + color_out * 0.8 * NL, 0.0, 1.0);\n"
-    "   gl_FragColor = vec4(col, 1.0);\n"
-    "}\n";
-
 void GLWidget::initFigure(Figure &figure){
     QOpenGLVertexArrayObject::Binder vaoBinder(&m_vao);
     QOpenGLBuffer figureVbo;
@@ -123,8 +93,8 @@ void GLWidget::initializeGL()
     glClearColor(0.2, 0.2, 0.2, 1);
 
     m_program = new QOpenGLShaderProgram;
-    m_program->addShaderFromSourceCode(QOpenGLShader::Vertex, vertexShaderSource);
-    m_program->addShaderFromSourceCode(QOpenGLShader::Fragment, fragmentShaderSource);
+    m_program->addShaderFromSourceFile(QOpenGLShader::Vertex,":/vertex.vsh");
+    m_program->addShaderFromSourceFile(QOpenGLShader::Fragment,":/fragment.fsh");
     m_program->bindAttributeLocation("vertex", 0);
     m_program->bindAttributeLocation("normal", 1);
     m_program->bindAttributeLocation("color", 2);
@@ -166,15 +136,15 @@ void GLWidget::paintGL()
     QMatrix3x3 normalMatrix = m_world.normalMatrix();
     m_program->setUniformValue(m_normalMatrixLoc, normalMatrix);
 
-    QOpenGLFunctions *f = QOpenGLContext::currentContext()->functions();
+    //QOpenGLFunctions *f = QOpenGLContext::currentContext()->functions();
     for(int k = 0; k < m_nfigures ; ++k){
         m_figuresVbo_list[k].bind();
-        f->glEnableVertexAttribArray(0);
-        f->glEnableVertexAttribArray(1);
-        f->glEnableVertexAttribArray(2);
-        f->glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 9 * sizeof(GLfloat), 0);
-        f->glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 9 * sizeof(GLfloat), reinterpret_cast<void *>(3 * sizeof(GLfloat)));
-        f->glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, 9 * sizeof(GLfloat), reinterpret_cast<void *>(6 * sizeof(GLfloat)));
+        glEnableVertexAttribArray(0);
+        glEnableVertexAttribArray(1);
+        glEnableVertexAttribArray(2);
+        glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 9 * sizeof(GLfloat), 0);
+        glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 9 * sizeof(GLfloat), reinterpret_cast<void *>(3 * sizeof(GLfloat)));
+        glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, 9 * sizeof(GLfloat), reinterpret_cast<void *>(6 * sizeof(GLfloat)));
         glDrawArrays(GL_TRIANGLES, 0, m_figures_list[k].vertexCount());
         m_figuresVbo_list[k].release();
     }

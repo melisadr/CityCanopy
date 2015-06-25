@@ -10,9 +10,7 @@ public:
     ~TopoDataManager();
     void load(const QString filename);
 
-private:
-    float xllcorner;
-    float yllcorner;
+
 };
 
 #endif // TOPODATAMANAGER_H

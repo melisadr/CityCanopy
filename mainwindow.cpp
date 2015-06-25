@@ -11,7 +11,9 @@
 
 MainWindow::MainWindow(QWidget *parent) :
        QMainWindow(parent),
-       ui(new Ui::MainWindow)
+       ui(new Ui::MainWindow),
+       urban_set(0),
+       topo_set(0)
 {
 
     ui->setupUi(this);
@@ -29,6 +31,7 @@ void MainWindow::on_openTopoButton_clicked()
         qDebug() << "Opening :" << fileName;
         TopoFigure figure;
         topoDataManager.load(fileName);
+        topo_set = 1;
         figure.load(topoDataManager);
         ui->openGLWidget->initFigure(figure);
     }
@@ -41,6 +44,7 @@ void MainWindow::on_openUrbanButton_clicked()
         qDebug() << "Opening :" << fileName;
         UrbanFigure figure;
         urbanDataManager.load(fileName);
+        urban_set = 1;
         figure.load(urbanDataManager);
         ui->openGLWidget->initFigure(figure);
     }
@@ -48,6 +52,14 @@ void MainWindow::on_openUrbanButton_clicked()
 
 void MainWindow::on_exportButton_clicked()
 {
-    ExporterWRF exporterWRF;
-    exporterWRF.exportData(urbanDataManager);
+    if( urban_set > 0){
+        QString pathToExport = QFileDialog::getExistingDirectory();
+        if(pathToExport != "" ){
+            QDir::setCurrent(pathToExport);
+            ExporterWRF exporterWRF;
+            exporterWRF.exportData(urbanDataManager);
+        }
+    }else{
+        QMessageBox::information(this,tr("Error exporting"),tr("No urban data loaded"));
+    }
 }

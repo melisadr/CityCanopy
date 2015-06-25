@@ -15,8 +15,8 @@ void Exporter::writeData(float *data, int ncols, int nrows){
     int nz = 1;
     int isigned = 0;
     int endian = 1;
-    float scalefactor = 100.0f;
-    int wordsize = 4;
+    float scalefactor = 10;
+    int wordsize = 1;
 
     m_data.resize(ncols * nrows);
     float* p = m_data.data();
