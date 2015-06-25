@@ -17,6 +17,7 @@ void TopoFigure::load(DataManager &dataManager)
     int ncols = dataManager.getColsSize();
     int nrows = dataManager.getRowsSize();
     float mScale;
+    float hScale = 1.0/1000.0;
     QVector3D color(0.5,0.5,0.5);
 
     if(ncols >= nrows){
@@ -26,7 +27,7 @@ void TopoFigure::load(DataManager &dataManager)
     }
 
     // vertex i,j normal := m_normals[i*ncols+j]
-    finalNormals(dataManager,mScale);
+    finalNormals(dataManager,mScale,hScale);
 
     for(int i = 0; i < nrows-1; i++){
         for(int j = 0; j < ncols-1; j++){
@@ -36,10 +37,10 @@ void TopoFigure::load(DataManager &dataManager)
             GLfloat y1 = mScale*((nrows-1)/2.0f - i);
             GLfloat y2 = mScale*((nrows-1)/2.0f - i - 1);
 
-            GLfloat z11 = dataManager.getValue(i,j);
-            GLfloat z12 = dataManager.getValue((i+1),j);
-            GLfloat z22 = dataManager.getValue((i+1),(j+1));
-            GLfloat z21 = dataManager.getValue(i,(j+1));
+            GLfloat z11 = dataManager.getValue(i,j)*hScale;
+            GLfloat z12 = dataManager.getValue((i+1),j)*hScale;
+            GLfloat z22 = dataManager.getValue((i+1),(j+1))*hScale;
+            GLfloat z21 = dataManager.getValue(i,(j+1))*hScale;
 
             QVector3D v1(x1,y1,z11);
             QVector3D v2(x1,y2,z12);
@@ -57,7 +58,7 @@ void TopoFigure::load(DataManager &dataManager)
     }
 }
 
-void TopoFigure::finalNormals(DataManager &dataManager,float mScale )
+void TopoFigure::finalNormals(DataManager &dataManager,float mScale , float hScale)
 {
     int ncols = dataManager.getColsSize();
     int nrows = dataManager.getRowsSize();
@@ -75,10 +76,10 @@ void TopoFigure::finalNormals(DataManager &dataManager,float mScale )
             GLfloat y1 = mScale*((nrows-1)/2.0f - i);
             GLfloat y2 = mScale*((nrows-1)/2.0f - i - 1);
 
-            GLfloat z11 = dataManager.getValue(i,j);
-            GLfloat z12 = dataManager.getValue((i+1),j);
-            GLfloat z22 = dataManager.getValue((i+1),(j+1));
-            GLfloat z21 = dataManager.getValue(i,(j+1));
+            GLfloat z11 = dataManager.getValue(i,j)*hScale;
+            GLfloat z12 = dataManager.getValue((i+1),j)*hScale;
+            GLfloat z22 = dataManager.getValue((i+1),(j+1))*hScale;
+            GLfloat z21 = dataManager.getValue(i,(j+1))*hScale;
 
             QVector3D v1(x1,y1,z11);
             QVector3D v2(x1,y2,z12);

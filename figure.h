@@ -19,6 +19,7 @@ protected:
     QVector<GLfloat> m_data;
     QVector<QVector3D> m_normals;
     int m_count;
+
 };
 
 #endif // FIGURE_H

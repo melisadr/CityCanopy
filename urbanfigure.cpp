@@ -17,6 +17,7 @@ void UrbanFigure::load(DataManager &dataManager)
     int ncols = dataManager.getColsSize();
     int nrows = dataManager.getRowsSize();
     float mScale;
+    float hScale = 1.0/1000.0;
 
     if(ncols >= nrows){
         mScale = 1.0f/(ncols-1);
@@ -29,7 +30,7 @@ void UrbanFigure::load(DataManager &dataManager)
 
             GLfloat xc = mScale*(j - (ncols-1)/2.0f);
             GLfloat yc = mScale*((nrows-1)/2.0f - i);
-            GLfloat zc = dataManager.getValue(i,j);
+            GLfloat zc = dataManager.getValue(i,j)*hScale;
 
             if(zc > 0.0f)
             {

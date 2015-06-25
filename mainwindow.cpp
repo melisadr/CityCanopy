@@ -1,4 +1,5 @@
 #include "mainwindow.h"
+#include "ui_mainwindow.h"
 #include "glwidget.h"
 #include "topodatamanager.h"
 #include "topofigure.h"
@@ -11,72 +12,41 @@
 #include <QFileDialog>
 
 
-MainWindow::MainWindow() : centralWidget(0)
+MainWindow::MainWindow(QWidget *parent) :
+       QMainWindow(parent),
+       ui(new Ui::MainWindow)
 {
-    initMenuBar();
-    initCentralWidget();
-    initToolBar();
+
+    ui->setupUi(this);
 }
 
-void MainWindow::initMenuBar()
+MainWindow::~MainWindow()
 {
-    QMenuBar *menuBar = new QMenuBar;
-    setMenuBar(menuBar);
-
-    QMenu *menuArchive = menuBar->addMenu(tr("Archive"));
-
-    QAction *openTopo = new QAction(menuArchive);
-    openTopo->setText(tr("Open topo"));
-    menuArchive-> addAction(openTopo);
-    connect(openTopo,SIGNAL(triggered()),this,SLOT(openTopo()));
-
-    QAction *openUrban = new QAction(menuArchive);
-    openUrban->setText(tr("Open urban"));
-    menuArchive-> addAction(openUrban);
-    connect(openUrban,SIGNAL(triggered()),this,SLOT(openUrban()));
-
+    delete ui;
 }
 
-void MainWindow::initCentralWidget()
+void MainWindow::on_openTopoButton_clicked()
 {
-    if (!centralWidget)
-    {
-        centralWidget = new GLWidget(this);
-        setCentralWidget(centralWidget);
+    QString fileName = QFileDialog::getOpenFileName();
+    if (fileName != ""){
+        qDebug() << "Opening :" << fileName;
+        TopoFigure figure;
+        TopoDataManager dataManager;
+        dataManager.load(fileName);
+        figure.load(dataManager);
+        ui->openGLWidget->initFigure(figure);
     }
-
 }
 
-void MainWindow::initToolBar()
-{
-    QToolBar *toolBar = new QToolBar(tr("&Tools"));
-    QAction *clearWidget = new QAction(toolBar);
-    clearWidget->setText(tr("Clear"));
-    toolBar->addAction(clearWidget);
-
-    addToolBar(Qt::RightToolBarArea, toolBar);
-
-}
-
-void MainWindow::openTopo()
+void MainWindow::on_openUrbanButton_clicked()
 {
     QString fileName = QFileDialog::getOpenFileName();
-    qDebug() << "Opening :" << fileName;
-    TopoFigure figure;
-    TopoDataManager dataManager;
-    dataManager.load(fileName);
-    figure.load(dataManager);
-    centralWidget->initFigure(figure);
-}
-
-void MainWindow::openUrban()
-{
-    QString fileName = QFileDialog::getOpenFileName();
-    qDebug() << "Opening :" << fileName;
-    UrbanFigure figure;
-    UrbanDataManager dataManager;
-    dataManager.load(fileName);
-    figure.load(dataManager);
-    centralWidget->initFigure(figure);
-
+    if(fileName != ""){
+        qDebug() << "Opening :" << fileName;
+        UrbanFigure figure;
+        UrbanDataManager dataManager;
+        dataManager.load(fileName);
+        figure.load(dataManager);
+        ui->openGLWidget->initFigure(figure);
+    }
 }

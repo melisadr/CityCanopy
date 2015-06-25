@@ -120,7 +120,7 @@ void GLWidget::initializeGL()
 {
 
     initializeOpenGLFunctions();
-    glClearColor(0, 0, 0, 1);
+    glClearColor(0.2, 0.2, 0.2, 1);
 
     m_program = new QOpenGLShaderProgram;
     m_program->addShaderFromSourceCode(QOpenGLShader::Vertex, vertexShaderSource);
@@ -139,7 +139,7 @@ void GLWidget::initializeGL()
     m_vao.create();
     QOpenGLVertexArrayObject::Binder vaoBinder(&m_vao);
 
-    m_cameraPosZ = 10.0f;
+    m_cameraPosZ = 5.0f;
 
     m_program->setUniformValue(m_lightPosLoc, QVector3D(0, 0, 30));
     m_program->release();
@@ -166,9 +166,9 @@ void GLWidget::paintGL()
     QMatrix3x3 normalMatrix = m_world.normalMatrix();
     m_program->setUniformValue(m_normalMatrixLoc, normalMatrix);
 
+    QOpenGLFunctions *f = QOpenGLContext::currentContext()->functions();
     for(int k = 0; k < m_nfigures ; ++k){
         m_figuresVbo_list[k].bind();
-        QOpenGLFunctions *f = QOpenGLContext::currentContext()->functions();
         f->glEnableVertexAttribArray(0);
         f->glEnableVertexAttribArray(1);
         f->glEnableVertexAttribArray(2);

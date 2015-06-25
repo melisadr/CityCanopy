@@ -10,7 +10,7 @@ public:
     void load(DataManager &dataManager);
 
 private:
-    void finalNormals(DataManager &dataManager,float mScale);
+    void finalNormals(DataManager &dataManager,float mScale,float hScale);
 };
 
 #endif // TOPOFIGURE_H

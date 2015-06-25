@@ -4,25 +4,26 @@
 
 #include <QMainWindow>
 
-class GLWidget;
+namespace Ui {
+    class MainWindow;
+}
 
 class MainWindow : public QMainWindow
 {
     Q_OBJECT
 
 public:
-    MainWindow();
+    explicit MainWindow(QWidget *parent = 0);
+    ~MainWindow();
 
 private:
-    void initMenuBar();
-    void initCentralWidget();
-    void initToolBar();
-    GLWidget *centralWidget;
+    Ui::MainWindow *ui;
+
+    //GLWidget *centralWidget;
 
 private slots:
-    void openTopo();
-    void openUrban();
-
+    void on_openTopoButton_clicked();
+    void on_openUrbanButton_clicked();
 };
 
 #endif // MAINWINDOW_H
