@@ -29,11 +29,9 @@ void MainWindow::on_openTopoButton_clicked()
     QString fileName = QFileDialog::getOpenFileName();
     if (fileName != ""){
         qDebug() << "Opening :" << fileName;
-        TopoFigure figure;
-        topoDataManager.load(fileName);
-        topo_set = 1;
-        figure.load(topoDataManager);
-        ui->openGLWidget->initFigure(figure);
+        topoDataManager = new TopoDataManager;
+        topoDataManager->load(fileName);
+        ui->openGLWidget->initFigure(topoDataManager);
     }
 }
 
@@ -42,11 +40,10 @@ void MainWindow::on_openUrbanButton_clicked()
     QString fileName = QFileDialog::getOpenFileName();
     if(fileName != ""){
         qDebug() << "Opening :" << fileName;
-        UrbanFigure figure;
-        urbanDataManager.load(fileName);
-        urban_set = 1;
-        figure.load(urbanDataManager);
-        ui->openGLWidget->initFigure(figure);
+        QSharedPointer<Figure> figure = QSharedPointer<Figure>(new UrbanFigure);
+        urbanDataManager = new UrbanDataManager;
+        urbanDataManager->load(fileName);
+        ui->openGLWidget->initFigure(urbanDataManager);
     }
 }
 

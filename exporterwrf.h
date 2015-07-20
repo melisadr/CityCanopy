@@ -8,7 +8,7 @@ class ExporterWRF : public Exporter
 public:
     ExporterWRF();
     ~ExporterWRF();
-    void exportData(DataManager &dataManager);
+    void exportData(DataManager* dataManager);
 
 private:
     void writeIndexData(int ncols,int nrows,float lonMin,float latMin,float cellsize);

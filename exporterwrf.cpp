@@ -10,14 +10,14 @@ ExporterWRF::~ExporterWRF()
 
 }
 
-void ExporterWRF::exportData(DataManager &dataManager){
-    int ncols = dataManager.getColsSize();
-    int nrows = dataManager.getRowsSize();
-    float lonMin = dataManager.getLonMin();
-    float latMin = dataManager.getLatMin();
-    float cellsize = dataManager.getCellSize();
+void ExporterWRF::exportData(DataManager* dataManager){
+    int ncols = dataManager->getColsSize();
+    int nrows = dataManager->getRowsSize();
+    float lonMin = dataManager->getLonMin();
+    float latMin = dataManager->getLatMin();
+    float cellsize = dataManager->getCellSize();
 
-    writeData(dataManager.getData().data(),ncols,nrows);
+    writeData(dataManager->getData().data(),ncols,nrows);
     writeIndexData(ncols,nrows,lonMin,latMin,cellsize);
 }
 
@@ -30,8 +30,8 @@ void ExporterWRF::writeIndexData(int ncols,int nrows,float lonMin,float latMin,f
         out << "category_min=31" << endl;
         out << "category_max=33" << endl;
         out << "projection=regular_ll" << endl;
-        out << "dx="<< cellsize << endl;
-        out << "dy="<< cellsize << endl;
+        out << "dx=" << cellsize << endl;
+        out << "dy=" << cellsize << endl;
         out << "known_x=1.0" << endl;
         out << "known_y=1.0" << endl;
         out << "known_lat=" << latMin << endl;

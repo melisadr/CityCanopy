@@ -7,6 +7,11 @@
 #include <QOpenGLBuffer>
 #include <QMatrix4x4>
 #include "figure.h"
+#include "datamanager.h"
+#include "topodatamanager.h"
+#include "urbandatamanager.h"
+#include "topofigure.h"
+#include "urbanfigure.h"
 
 QT_FORWARD_DECLARE_CLASS(QOpenGLShaderProgram)
 
@@ -17,7 +22,9 @@ class GLWidget : public QOpenGLWidget, protected QOpenGLFunctions
 public:
     GLWidget(QWidget *parent = 0);
     ~GLWidget();
-    void initFigure(Figure &figure);
+    void initFigure(QSharedPointer<Figure> figure);
+    void initFigure(TopoDataManager* dataManager);
+    void initFigure(UrbanDataManager* dataManager);
     QSize minimumSizeHint() const Q_DECL_OVERRIDE;
     QSize sizeHint() const Q_DECL_OVERRIDE;
     void setXRotation(int angle);
@@ -41,9 +48,7 @@ private:
     int m_nfigures;
     float m_cameraPosZ;
     QPoint m_lastPos;
-    QVector<Figure> m_figures_list;
-    QVector<QOpenGLBuffer> m_figuresVbo_list;
-    QOpenGLVertexArrayObject m_vao;
+    QVector< QSharedPointer<Figure> > m_figures_list;
     QOpenGLShaderProgram *m_program;
     int m_projMatrixLoc;
     int m_mvMatrixLoc;
@@ -53,6 +58,9 @@ private:
     QMatrix4x4 m_camera;
     QMatrix4x4 m_world;
     bool m_transparent;
+
+    TopoFigure* m_topoFigure;
+    UrbanFigure* m_urbanFigure;
 };
 
 #endif

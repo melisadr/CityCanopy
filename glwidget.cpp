@@ -10,7 +10,9 @@ GLWidget::GLWidget(QWidget *parent)
       m_yRot(0),
       m_zRot(0),
       m_nfigures(0),
-      m_program(0)
+      m_program(0),
+      m_urbanFigure(0),
+      m_topoFigure(0)
 {
     m_core = QCoreApplication::arguments().contains(QStringLiteral("--coreprofile"));
     // --transparent causes the clear color to be transparent. Therefore, on systems that
@@ -71,20 +73,28 @@ void GLWidget::setZRotation(int angle)
     }
 }
 
-void GLWidget::initFigure(Figure &figure){
-    QOpenGLVertexArrayObject::Binder vaoBinder(&m_vao);
-    QOpenGLBuffer figureVbo;
-    figureVbo.create();
-    figureVbo.bind();
-    figureVbo.allocate(figure.constData(), figure.count() * sizeof(GLfloat));
-    m_figuresVbo_list.append(figureVbo);
-    m_figures_list.append(figure);
-    m_nfigures++;
-    figureVbo.release();
-    m_vao.release();
-    update();
+void GLWidget::initFigure(TopoDataManager* dataManager){
+    m_topoFigure = new TopoFigure;
+    m_topoFigure->load(dataManager,3,3);
+    initFigure(QSharedPointer<Figure>(m_topoFigure));
 }
 
+void GLWidget::initFigure(UrbanDataManager* dataManager){
+    m_urbanFigure = new UrbanFigure;
+    if(m_topoFigure){
+        m_urbanFigure->load(dataManager,3,3,m_topoFigure);
+    }else{
+        m_urbanFigure->load(dataManager,3,3);
+    }
+    initFigure(QSharedPointer<Figure>(m_urbanFigure));
+}
+
+void GLWidget::initFigure(QSharedPointer<Figure> figure){
+    figure->initOpenGLObjects();
+    m_figures_list.append(figure);
+    m_nfigures++;
+    update();
+}
 
 void GLWidget::initializeGL()
 {
@@ -106,9 +116,6 @@ void GLWidget::initializeGL()
     m_normalMatrixLoc = m_program->uniformLocation("normalMatrix");
     m_lightPosLoc = m_program->uniformLocation("lightPos");
 
-    m_vao.create();
-    QOpenGLVertexArrayObject::Binder vaoBinder(&m_vao);
-
     m_cameraPosZ = 5.0f;
 
     m_program->setUniformValue(m_lightPosLoc, QVector3D(0, 0, 30));
@@ -129,24 +136,14 @@ void GLWidget::paintGL()
     m_camera.setToIdentity();
     m_camera.lookAt(QVector3D(0,0,m_cameraPosZ),QVector3D(0,0,0),QVector3D(0,1,0));
 
-    QOpenGLVertexArrayObject::Binder vaoBinder(&m_vao);
     m_program->bind();
     m_program->setUniformValue(m_projMatrixLoc, m_proj);
     m_program->setUniformValue(m_mvMatrixLoc, m_camera * m_world);
     QMatrix3x3 normalMatrix = m_world.normalMatrix();
     m_program->setUniformValue(m_normalMatrixLoc, normalMatrix);
 
-    //QOpenGLFunctions *f = QOpenGLContext::currentContext()->functions();
     for(int k = 0; k < m_nfigures ; ++k){
-        m_figuresVbo_list[k].bind();
-        glEnableVertexAttribArray(0);
-        glEnableVertexAttribArray(1);
-        glEnableVertexAttribArray(2);
-        glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 9 * sizeof(GLfloat), 0);
-        glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 9 * sizeof(GLfloat), reinterpret_cast<void *>(3 * sizeof(GLfloat)));
-        glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, 9 * sizeof(GLfloat), reinterpret_cast<void *>(6 * sizeof(GLfloat)));
-        glDrawArrays(GL_TRIANGLES, 0, m_figures_list[k].vertexCount());
-        m_figuresVbo_list[k].release();
+        m_figures_list[k]->draw();
     }
     m_program->release();
 }
@@ -154,7 +151,7 @@ void GLWidget::paintGL()
 void GLWidget::resizeGL(int w, int h)
 {
     m_proj.setToIdentity();
-    m_proj.perspective(45.0f, GLfloat(w) / h, 0.01f, 100.0f);
+    m_proj.perspective(45.0f, GLfloat(w) / h, 0.01f, 50.0f);
 }
 
 void GLWidget::mousePressEvent(QMouseEvent *event)

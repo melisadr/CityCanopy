@@ -7,10 +7,11 @@ class TopoFigure : public Figure
 public:
     TopoFigure();
     ~TopoFigure();
-    void load(DataManager &dataManager);
+    void load(DataManager* dataManager,float width, float height);
+    float getZValue(float x, float y);
 
 private:
-    void finalNormals(DataManager &dataManager,float mScale,float hScale);
+    void finalNormals();
 };
 
 #endif // TOPOFIGURE_H

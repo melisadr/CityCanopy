@@ -21,8 +21,8 @@ public:
 
 private:
     Ui::MainWindow *ui;
-    TopoDataManager topoDataManager;
-    UrbanDataManager urbanDataManager;
+    TopoDataManager* topoDataManager;
+    UrbanDataManager* urbanDataManager;
     int urban_set;
     int topo_set;
 
