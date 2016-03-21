@@ -38,8 +38,8 @@
      <widget class="QGroupBox" name="groupBox">
       <property name="maximumSize">
        <size>
-        <width>127</width>
-        <height>101</height>
+        <width>120</width>
+        <height>144</height>
        </size>
       </property>
       <property name="title">
@@ -61,9 +61,23 @@
         </widget>
        </item>
        <item>
+        <widget class="QPushButton" name="openOSMButton">
+         <property name="text">
+          <string>Add OSM</string>
+         </property>
+        </widget>
+       </item>
+       <item>
         <widget class="QPushButton" name="exportButton">
          <property name="text">
           <string>Export</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QPushButton" name="clearButton">
+         <property name="text">
+          <string>Clear</string>
          </property>
         </widget>
        </item>

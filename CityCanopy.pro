@@ -22,7 +22,9 @@ SOURCES += main.cpp\
     urbanfigure.cpp \
     write_geogrid.c \
     exporter.cpp \
-    exporterwrf.cpp
+    wrfexporter.cpp \
+    osmdatamanager.cpp \
+    osmfigure.cpp
 
 HEADERS  += mainwindow.h \
     glwidget.h \
@@ -33,14 +35,14 @@ HEADERS  += mainwindow.h \
     urbandatamanager.h \
     urbanfigure.h \
     exporter.h \
-    exporterwrf.h
+    wrfexporter.h \
+    osmdatamanager.h \
+    osmfigure.h
 
 FORMS    += \
     mainwindow.ui
 
-DISTFILES += \
-    vertex.vsh \
-    fragment.fsh
+DISTFILES +=
 
 RESOURCES += \
     resources.qrc

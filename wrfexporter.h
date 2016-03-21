@@ -1,17 +1,18 @@
-#ifndef EXPORTERWRF_H
-#define EXPORTERWRF_H
+#ifndef WRFEXPORTER_H
+#define WRFEXPORTER_H
 #include "exporter.h"
 #include "datamanager.h"
 
-class ExporterWRF : public Exporter
+class WRFExporter : public Exporter
 {
 public:
-    ExporterWRF();
-    ~ExporterWRF();
+    WRFExporter();
+    ~WRFExporter();
     void exportData(DataManager* dataManager);
 
 private:
+    void writeData(float *data, int ncols, int nrows);
     void writeIndexData(int ncols,int nrows,float lonMin,float latMin,float cellsize);
 };
 
-#endif // EXPORTERWRF_H
+#endif // WRFEXPORTER_H

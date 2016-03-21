@@ -8,9 +8,9 @@ public:
 
     Exporter();
     ~Exporter();
-    void writeData(float *data, int ncols, int nrows);
+    void exportData(DataManager* dataManager);
 
-private:
+protected:
     QVector<float> m_data;
 
 };

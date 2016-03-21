@@ -4,6 +4,7 @@
 #include "topofigure.h"
 #include "urbandatamanager.h"
 #include "urbanfigure.h"
+#include "osmdatamanager.h"
 
 #include <QMainWindow>
 
@@ -23,13 +24,17 @@ private:
     Ui::MainWindow *ui;
     TopoDataManager* topoDataManager;
     UrbanDataManager* urbanDataManager;
+    OsmDataManager* osmDataManager;
     int urban_set;
     int topo_set;
+    int osm_set;
 
 private slots:
     void on_openTopoButton_clicked();
     void on_openUrbanButton_clicked();
     void on_exportButton_clicked();
+    void on_openOSMButton_clicked();
+    void on_clearButton_clicked();
 };
 
 #endif // MAINWINDOW_H

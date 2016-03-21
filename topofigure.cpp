@@ -87,13 +87,13 @@ void TopoFigure::finalNormals()
             QVector3D n1 = QVector3D::normal(v2-v1,v3-v1);
             QVector3D n2 = QVector3D::normal(v3-v1,v4-v1);
 
-            m_normals[i*m_ncols + j] = (n1+m_normals[i*m_ncols+j]).normalized();
-            m_normals[(i+1)*m_ncols+j] = (n1+m_normals[(i+1)*m_ncols+j]).normalized();
-            m_normals[(i+1)*m_ncols+j+1] = (n1+m_normals[(i+1)*m_ncols+j+1]).normalized();
+            m_normals[i*m_ncols + j] = n1+m_normals[i*m_ncols+j];
+            m_normals[(i+1)*m_ncols+j] = n1+m_normals[(i+1)*m_ncols+j];
+            m_normals[(i+1)*m_ncols+j+1] = n1+m_normals[(i+1)*m_ncols+j+1];
 
-            m_normals[i*m_ncols+j] = (n2+m_normals[i*m_ncols+j]).normalized();
-            m_normals[(i+1)*m_ncols+j+1] = (n2+m_normals[(i+1)*m_ncols+j+1]).normalized();
-            m_normals[i*m_ncols+j+1] = (n2+m_normals[i*m_ncols+j+1]).normalized();
+            m_normals[i*m_ncols+j] = n2+m_normals[i*m_ncols+j];
+            m_normals[(i+1)*m_ncols+j+1] = n2+m_normals[(i+1)*m_ncols+j+1];
+            m_normals[i*m_ncols+j+1] = n2+m_normals[i*m_ncols+j+1];
         }
     }
 }

@@ -10,8 +10,10 @@
 #include "datamanager.h"
 #include "topodatamanager.h"
 #include "urbandatamanager.h"
+#include "osmdatamanager.h"
 #include "topofigure.h"
 #include "urbanfigure.h"
+#include "osmfigure.h"
 
 QT_FORWARD_DECLARE_CLASS(QOpenGLShaderProgram)
 
@@ -25,6 +27,8 @@ public:
     void initFigure(QSharedPointer<Figure> figure);
     void initFigure(TopoDataManager* dataManager);
     void initFigure(UrbanDataManager* dataManager);
+    void initFigure(OsmDataManager* dataManager);
+    void clearFigure();
     QSize minimumSizeHint() const Q_DECL_OVERRIDE;
     QSize sizeHint() const Q_DECL_OVERRIDE;
     void setXRotation(int angle);
@@ -58,9 +62,9 @@ private:
     QMatrix4x4 m_camera;
     QMatrix4x4 m_world;
     bool m_transparent;
-
     TopoFigure* m_topoFigure;
     UrbanFigure* m_urbanFigure;
+    OSMFigure* m_osmFigure;
 };
 
 #endif

@@ -1,22 +1,26 @@
-#include "urbanfigure.h"
+#include "osmfigure.h"
 #include <QVector3D>
 #include <QDebug>
+#define COMMERCIAL 33
+#define HIGHRESIDENTIAL 32
+#define LOWRESIDENTIAL 31
+#define NONE 0
 
-UrbanFigure::UrbanFigure()
+OSMFigure::OSMFigure()
 {
 
 }
 
-UrbanFigure::~UrbanFigure()
+OSMFigure::~OSMFigure()
 {
 
 }
 
-void UrbanFigure::load(DataManager *dataManager, float width, float height){
+void OSMFigure::load(DataManager *dataManager, float width, float height){
    load(dataManager,width,height, 0);
 }
 
-void UrbanFigure::load(DataManager *dataManager, float width, float height, TopoFigure* topoFigure)
+void OSMFigure::load(DataManager *dataManager, float width, float height, TopoFigure* topoFigure)
 {
     m_dataManager = dataManager;
     m_ncols = dataManager->getColsSize();
@@ -37,15 +41,15 @@ void UrbanFigure::load(DataManager *dataManager, float width, float height, Topo
             if(zc > 0.0f)
             {
                 QVector3D color;
-                if (zc >= 10){
+                if (zc == COMMERCIAL){
                     color = QVector3D(1.0,0.0,0.0);
-                }else if(zc >= 7.5){
+                }else if(zc == HIGHRESIDENTIAL){
                     color = QVector3D(0.0,1.0,0.0);
-                }else{
+                }else if(zc == LOWRESIDENTIAL){
                     color = QVector3D(0.0,0.0,1.0);
                 }
 
-                zc = zc*m_zScale;
+                zc = m_zScale*10;
                 float zb = 0.0f;
                 if(topoFigure){
                     zb = topoFigure->getZValue(xc,yc);
@@ -73,7 +77,7 @@ void UrbanFigure::load(DataManager *dataManager, float width, float height, Topo
                 addQuad(v2,v6,v7,v3,color);
                 addQuad(v3,v7,v8,v4,color);
                 addQuad(v4,v8,v5,v1,color);
-
+                //bottom face
                 addQuad(v8,v7,v6,v5,color);
 
             }
@@ -81,7 +85,7 @@ void UrbanFigure::load(DataManager *dataManager, float width, float height, Topo
     }
 }
 
-void UrbanFigure::addQuad(QVector3D v1, QVector3D v2, QVector3D v3,QVector3D v4,QVector3D color)
+void OSMFigure::addQuad(QVector3D v1, QVector3D v2, QVector3D v3,QVector3D v4,QVector3D color)
 {
     QVector3D n = QVector3D::normal(v2-v1,v3-v1);
     add(v1,n,color);

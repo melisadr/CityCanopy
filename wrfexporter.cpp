@@ -1,16 +1,18 @@
-#include "exporterwrf.h"
+#include "wrfexporter.h"
+#include "write_geogrid.c"
+#include <QDebug>
 
-ExporterWRF::ExporterWRF()
+WRFExporter::WRFExporter()
 {
 
 }
 
-ExporterWRF::~ExporterWRF()
+WRFExporter::~WRFExporter()
 {
 
 }
 
-void ExporterWRF::exportData(DataManager* dataManager){
+void WRFExporter::exportData(DataManager* dataManager){
     int ncols = dataManager->getColsSize();
     int nrows = dataManager->getRowsSize();
     float lonMin = dataManager->getLonMin();
@@ -21,7 +23,7 @@ void ExporterWRF::exportData(DataManager* dataManager){
     writeIndexData(ncols,nrows,lonMin,latMin,cellsize);
 }
 
-void ExporterWRF::writeIndexData(int ncols,int nrows,float lonMin,float latMin,float cellsize){
+void WRFExporter::writeIndexData(int ncols,int nrows,float lonMin,float latMin,float cellsize){
     QFile file;
     file.setFileName("index");
     if( file.open(QIODevice::WriteOnly | QIODevice::Text)){
@@ -45,5 +47,44 @@ void ExporterWRF::writeIndexData(int ncols,int nrows,float lonMin,float latMin,f
         out << "description=\"3-category urban LU\"" << endl;
         file.close();
     }
+}
+
+void WRFExporter::writeData(float *data, int ncols, int nrows){
+    int nz = 1;
+    int isigned = 0;
+    int endian = 1;
+    float scalefactor = 1.0;
+    int wordsize = 1;
+
+    m_data.resize(ncols * nrows);
+    float* p = m_data.data();
+
+    for (int i = nrows-1 ; i >= 0 ; i--){
+        for (int j = 0; j < ncols ; j++){
+            float value = data[i*ncols + j];
+            /*if(value == 33 || value == 32 || value == 31)
+                *p++ = value;
+            else
+                *p++ = 0;*/
+
+            if(value > 0)
+                *p++ = 31;
+            else
+                *p++ = 0;
+
+            /*
+            if(value >= 10.0)
+                *p++ = 33;
+            else if(value >= 7.5)
+                *p++ = 32;
+            else if(value > 0)
+                *p++ = 31;
+            else
+                *p++ = 0;
+            */
+        }
+    }
+    write_geogrid(m_data.data(),&ncols,&nrows,&nz,&isigned,&endian,&scalefactor,&wordsize);
+
 }
 

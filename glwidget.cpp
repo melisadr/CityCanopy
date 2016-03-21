@@ -89,10 +89,26 @@ void GLWidget::initFigure(UrbanDataManager* dataManager){
     initFigure(QSharedPointer<Figure>(m_urbanFigure));
 }
 
+void GLWidget::initFigure(OsmDataManager* dataManager){
+    m_osmFigure = new OSMFigure;
+    if(m_topoFigure){
+        m_osmFigure->load(dataManager,3,3,m_topoFigure);
+    }else{
+        m_osmFigure->load(dataManager,3,3);
+    }
+    initFigure(QSharedPointer<Figure>(m_osmFigure));
+}
+
 void GLWidget::initFigure(QSharedPointer<Figure> figure){
     figure->initOpenGLObjects();
     m_figures_list.append(figure);
     m_nfigures++;
+    update();
+}
+
+void GLWidget::clearFigure(){
+    m_nfigures=0;
+    m_figures_list.clear();
     update();
 }
 
